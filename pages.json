@@ -61,38 +61,30 @@
 		"backgroundColor": "#FFFFFF"
 	},
 	"tabBar": {
-	    "color": "#e6b514",
-	    "selectedColor": "#3cc51f",
+	    "color": "#adadad",
+	    "selectedColor": "#fff",
 	    "borderStyle": "black",
-	    "backgroundColor": "#ffffff",
+	    "backgroundColor": "#000000",
 	    "fontSize": "13px",
 	    "list": [{
 	        "pagePath": "pages/index/index",
-	        "iconPath": "static/image/shouye@2x.png",
-	        "selectedIconPath": "static/image/shouye@3x.png",
 	        "text": "首页"
 	      },
 		  {
 		      "pagePath": "pages/Journalism/Journalism",
-		      "iconPath": "static/image/guangchang2@2x.png",
-		      "selectedIconPath": "static/image/guangchang@2x.png",
 		      "text": "新闻"
 		   },
 		   {
 		       "pagePath": "pages/release/release",
-		       "iconPath": "static/image/fabu@2x.png",
-		       "selectedIconPath": "static/image/fabu@2x.png"
+		       "iconPath": "static/image/fabu.png",
+			   "selectedIconPath": "static/image/fabu2.png"
 		    },
 			{
 			    "pagePath": "pages/news/news",
-			    "iconPath": "static/image/xiaoxi@2x.png",
-			    "selectedIconPath": "static/image/xiaoxi2@2x.png",
 			    "text": "消息"
 			 },
 			 {
 			     "pagePath": "pages/mine/mine",
-			     "iconPath": "static/image/wode1@2x.png",
-			     "selectedIconPath": "static/image/wode2@2x.png",
 			     "text": "我的"
 			  }
 	    ]
