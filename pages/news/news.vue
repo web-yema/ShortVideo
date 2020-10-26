@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		阿斯顿
 	</view>
 </template>
 
