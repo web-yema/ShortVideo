@@ -1,16 +1,14 @@
 <template>
 	<view>
-		首页
-		<dianzhan></dianzhan>
-		sdsd 
+		<vertical></vertical>
 	</view>
 </template>
 
 <script>
-	import dianzhan from './dianzhan.vue'
+	import vertical from './swiper-vertical.vue'
 	export default {
 		components:{
-			dianzhan
+			vertical
 		},
 		data() {
 			return {
