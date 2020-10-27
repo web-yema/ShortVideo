@@ -61,14 +61,13 @@
 			}
 		},
 		onLoad() {
-			this.socket.on('connect', () => {
-				console.log('connection created.')
-			});
+			
 			//监听广播消息
-			this.getMsg() 
+			this.getMsg()
 		},
 		computed:{
 			...mapState(['chatdate','admin'])
+			
 		},
 		methods:{
 			 focusTextarea(e) {
@@ -90,10 +89,13 @@
 					let chatData= {
 						username: this.admin.username,
 						nickname:this.admin.nickname,
+						receiver: this.chatdate.username,
+						ids:this.socket.id,
+						sender: this.admin.username,
 						msg: this.content
 					}
-					this.list.push(chatData)
-					this.socket.emit('sendMessage', chatData);
+					this.list.push(chatData);
+					this.socket.emit('private_chat', chatData);
 					this.content =''
 					this.scrollTop = this.itemAverageHeight * this.list.length;
 				} else {
@@ -107,11 +109,12 @@
 			//接收消息
 			getMsg() {
 				//接收广播消息
-				this.socket.on('getMessage', (content) => {
+				this.socket.on('reply_private_chat', (content) => {
 					console.log(content)
 					this.list.push(content)
 					this.scrollTop = this.itemAverageHeight * this.list.length;
 				});
+				
 			
 				//接收有新人连接的消息
 				// this.socket.on('newPeer', (name) => {
@@ -136,8 +139,9 @@
 	box-sizing: border-box;
 	width: 100vw;
 	height: 4.3rem;
-	background: pink;
+	background: #007AFF;
 	display: flex;
+	color: #FFFFFF;
 	.title{
 		margin-left: 0.5rem;
 	}
@@ -152,7 +156,7 @@
 }
 .content-box{
 	width: 100vw;
-	background: #F0AD4E;
+	background: #F2F6FC;
 	height: calc(100vh - 4.3rem -  4rem);
 	padding:0 1rem;
 	padding-bottom: 0.5rem;
@@ -196,7 +200,10 @@
 			border-radius: 5px;
 			padding: 0.5rem;
 			box-sizing: border-box;
-			background: pink;
+			background: #FFFFFF;
+			word-wrap: break-word;
+			white-space: normal;
+			word-break: break-all;
 		}
 	}
 }
@@ -232,7 +239,10 @@
 			border-radius: 5px;
 			padding: 0.5rem;
 			box-sizing: border-box;
-			background: pink;
+			background: #FFFFFF;
+			word-wrap: break-word;
+			white-space: normal;
+			word-break: break-all;
 		}
 	}
 }

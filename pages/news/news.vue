@@ -10,6 +10,9 @@
 			return {
 				
 			};
+		},
+		mounted() {
+			this.$store.dispatch("admins");
 		}
 	}
 </script>

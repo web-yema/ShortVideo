@@ -4,16 +4,14 @@ Vue.use(Vuex)
 import {
 	baseUrl
 } from '@/api/index.js'
+
+import io from 'common/weapp.socket.io.js'
+// const socket = io(baseUrl);
 export default new Vuex.Store({
 	state: {
-		admin: {
-			username:'15735163995',
-			nickname:'lxp'
-		},
+		admin: {},
 		squareId:0,
-		chatdate:{
-			username:'15735163994'
-		},
+		chatdate:{},
 	},
 	mutations: {
 		// 消息好友信息
@@ -25,7 +23,6 @@ export default new Vuex.Store({
 		},
 		admins(state) {
 			const admin = uni.getStorageSync('admin');
-
 			if (admin) {
 				state.admin = admin
 			}
@@ -40,22 +37,31 @@ export default new Vuex.Store({
 			});
 			if (!admins) {
 				uni.switchTab({
-					url: '/pages/mys/mys'
-				});
+					url: '/pages/mine/mine'
+				})
 			}
 		},
 		squareids(state,data){
 			state.squareId = data
 		},
 		
-		
-		
 	},
 	actions: {
+		// 聊天建立
+		onlines({state}){
+			if(state.admin.username){
+				
+				
+			}else{
+				uni.navigateTo({
+				    url: '/pages/login/login'
+				});
+			}
+			
+		},
 		// 消息好友信息
 		chatDates({commit},data){
-			console.log('ss')
-			commit('chatDate',data)
+			commit('chatDate',data);
 		},
 		squareid({commit},data){
 			commit('squareids',data)
