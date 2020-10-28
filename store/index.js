@@ -9,10 +9,19 @@ import io from 'common/weapp.socket.io.js'
 // const socket = io(baseUrl);
 export default new Vuex.Store({
 	state: {
+<<<<<<< HEAD
 		admin: {},
 		squareId: 0,
 		chatdate: {},
 		receivers: {}
+=======
+		admin: {
+			username:'1234567890',
+			nickname:'12345'
+		},
+		squareId:0,
+		chatdate:{},
+>>>>>>> main
 	},
 	mutations: {
 		// 消息好友信息

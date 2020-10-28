@@ -1,0 +1,36 @@
+<template>
+	<view :style="{height: screenHeight}">
+		<vertical></vertical>
+	</view>
+</template>
+
+<script>
+	import vertical from './swiper-vertical.nvue'
+	export default {
+		components:{
+			vertical
+		},
+		data() {
+			return {
+				screenHeight:0
+			};
+		},
+		mounted() {
+			let height = 0
+			uni.getSystemInfo({
+				success(res) {
+					height = res.screenHeight-50+'px'
+				}
+			})
+			this.screenHeight = height
+			console.log(this.screenHeight)
+		}
+	}
+</script>
+
+<style lang="less">
+.home{
+	height: 670vh;
+	background-color: grey;
+}
+</style>
