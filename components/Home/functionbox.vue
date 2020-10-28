@@ -1,15 +1,11 @@
 <template>
 	<view>
-		<vertical></vertical>
+		123
 	</view>
 </template>
 
 <script>
-	import vertical from './swiper-vertical.vue'
 	export default {
-		components:{
-			vertical
-		},
 		data() {
 			return {
 				

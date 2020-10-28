@@ -24,7 +24,7 @@
 					{
 						_id:'1',
 						title:'Generator是ES6中新增的语法，和Promise一样，都可以用来异步编程',
-						videourl:'http://domhttp.kksmg.com/2018/12/20/h264_450k_mp4_SHNewsHD30000002018122030705997091_aac.mp4',
+						videourl:'https://videocdn.jellow.site/lr2GzKAHbbLQYz1aL4s3Vex60zmM.mp4?sign=be7a7311c6dc2000837ce58a0d619e50&t=5f96beba',
 						user:'哈哈哈',
 						date:'2020-4-14',
 						time:'17:24:08'

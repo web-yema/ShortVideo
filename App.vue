@@ -1,12 +1,24 @@
 <script>
 export default {
 	onLaunch: function() {
-
-		console.log('App Launch');
+		this.$store.dispatch("admins");
+		this.$store.dispatch("loginStates");
+		if (this.$store.state.admin.username) {
+		      this.socket.on("connect", () => {
+		        this.socket.emit("online", this.$store.state.admin.username);
+		      });
+		    } else {
+		      uni.navigateTo({
+		        url: "/pages/login/login",
+		      });
+		    }
 	},
 	onShow: function() {
+		
+		console.log(this.socket.id)
 		console.log('App Show');
 	},
+
 	onHide: function() {
 		console.log('App Hide');
 	}
