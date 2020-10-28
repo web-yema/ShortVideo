@@ -15,7 +15,7 @@ export default {
   },
   onShow: function () {
     console.log(this.socket.id);
-    console.log("App Show")
+    console.log("App Show");
   },
 
   onHide: function () {
