@@ -8,10 +8,10 @@
 			</view>
 		</view>
 
-		<view class="list-box" v-for="(item,index) in arr" :key='index' @click="toChat(`机器人${item}`)">
+		<view class="list-box" v-for="(item,index) in arr" :key='index' @click="toChat(item)">
 			<image class="photo" src="../../static/msg/at.png"></image>
 			<view class="name-box">
-				<view class="nickname">机器人</view>
+				<view class="nickname">机器人{{item}}</view>
 				<view class="signature">ssdsd</view>
 			</view>
 		</view>
@@ -22,16 +22,16 @@
 	export default {
 		data() {
 			return {
-				arr:[1,2,3,4,5,6,7,8]
+				arr:[1,17635438954,15735163995,4,5,6,7,8]
 			}
 		},
 		methods: {
 			toChat(item){
-				this.$store.dispatch('chatDates',{usename:'12345',nickname:item})
+				this.$store.dispatch('chatDates',{username:item,nickname:`机器人${item}`})
 				uni.navigateTo({
 				    url: '/components/news/chat/chat'
 				});
-			}
+			},
 		}
 	}
 </script>

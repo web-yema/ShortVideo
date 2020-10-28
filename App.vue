@@ -1,12 +1,18 @@
 <script>
 export default {
 	onLaunch: function() {
-
-		console.log('App Launch');
+		this.$store.dispatch("admins");
+		this.$store.dispatch("loginStates");
+		this.socket.on('connect', () => {
+			this.socket.emit('online', this.$store.state.admin.username);
+		});
 	},
 	onShow: function() {
+		
+		console.log(this.socket.id)
 		console.log('App Show');
 	},
+
 	onHide: function() {
 		console.log('App Hide');
 	}
