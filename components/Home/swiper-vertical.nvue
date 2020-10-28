@@ -178,6 +178,6 @@
 		z-index: 1000000;
 	}
 	.uni-video-video{
-		height: auto !important;
+		/* height: auto !important; */
 	}
 </style>

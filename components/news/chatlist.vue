@@ -1,13 +1,5 @@
 <template>
   <view class="chat-list">
-    <!-- <view class="list-box" @click="toChat('抖音小助手')">
-      <image class="photo" src="../../static/msg/at.png" mode=""></image>
-      <view class="name-box">
-        <view class="nickname">抖音小助手</view>
-        <view class="signature">ssdsd</view>
-      </view>
-    </view> -->
-
     <view
       class="list-box"
       v-for="(item, index) in arr"
@@ -33,7 +25,17 @@ export default {
     };
   },
   mounted() {
-    this.friendsList();
+	  let tiemsa =setInterval(()=>{
+	  	if(this.admin.username){
+	  		clearInterval(tiemsa)
+	  		 this.friendsList()
+	  	}
+	  },100)
+     	
+  },
+  onShow() {
+	  console.log('sds')
+ 
   },
   computed: {
     ...mapState(["admin"]),

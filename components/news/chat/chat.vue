@@ -72,14 +72,23 @@ export default {
     };
   },
   onLoad() {
-    this.getMessage();
+	  // 获取聊天记录
+	let tiemsas =setInterval(()=>{
+		if(this.admin.username){
+			clearInterval(tiemsas)
+			  this.getMessage();
+		}
+	},100)
+  
     //监听广播消息
     this.getMsg();
   },
+  
   computed: {
     ...mapState(["chatdate", "admin"]),
   },
   methods: {
+	
     scroll: function (e) {
       this.old.scrollTop = e.detail.scrollTop;
     },

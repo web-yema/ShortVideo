@@ -3,14 +3,16 @@ export default {
   onLaunch: function () {
     this.$store.dispatch("admins");
     this.$store.dispatch("loginStates");
+	 this.socket.on("connect", () => {});
     if (this.$store.state.admin.username) {
-      this.socket.on("connect", () => {
-        this.socket.emit("online", this.$store.state.admin.username);
-      });
+        this.socket.emit("online", this.$store.state.admin.username); 
     } else {
-      uni.navigateTo({
-        url: "/pages/login/login",
-      });
+      // uni.navigateTo({
+      //   url: "/pages/login/login",
+      // });
+	  uni.reLaunch({
+	      url: '/pages/login/login'
+	  });
     }
   },
   onShow: function () {

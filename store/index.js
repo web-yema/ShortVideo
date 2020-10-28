@@ -5,8 +5,8 @@ import {
 	baseUrl
 } from '@/api/index.js'
 
-import io from 'common/weapp.socket.io.js'
-// const socket = io(baseUrl);
+
+
 export default new Vuex.Store({
 	state: {
 		admin: {},
@@ -34,6 +34,7 @@ export default new Vuex.Store({
 
 		},
 		loginStatesa(state, data) {
+			
 			state.admin = data.data
 			const admins = uni.getStorageSync('admin');
 			uni.setStorage({
@@ -41,9 +42,12 @@ export default new Vuex.Store({
 				data: data.data
 			});
 			if (!admins) {
-				uni.switchTab({
-					url: '/pages/mine/mine'
-				})
+				console.log('ss')
+					uni.hideLoading();
+					uni.switchTab({
+						url: '/pages/mine/mine'
+					})
+				
 			}
 		},
 		squareids(state, data) {
@@ -57,8 +61,8 @@ export default new Vuex.Store({
 			state
 		}) {
 			if (!state.admin.username) {
-				uni.navigateTo({
-					url: '/pages/login/login'
+				uni.reLaunch({
+				    url: '/pages/login/login'
 				});
 			}
 		},

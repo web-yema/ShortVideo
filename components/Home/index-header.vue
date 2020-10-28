@@ -30,7 +30,7 @@
 .middle {
     text-align: center;
     color: white;
-    display:flex;
+    /* display:flex; */
     font-size: 24upx;
     line-height: 50upx;
     flex-direction: row;
@@ -42,7 +42,7 @@
   color: white;
   }
 .text {
-    display: inline;
+    /* display: inline; */
     margin: 0 10px;
     text-align: center;
     color: white;
