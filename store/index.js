@@ -9,18 +9,20 @@ import io from 'common/weapp.socket.io.js'
 // const socket = io(baseUrl);
 export default new Vuex.Store({
 	state: {
-		admin: {
-			username:'1234567890',
-			nickname:'12345'
-		},
-		squareId:0,
-		chatdate:{},
+		admin: {},
+		squareId: 0,
+		chatdate: {},
+		receivers: {}
 	},
 	mutations: {
 		// 消息好友信息
-		chatDate(state,data){
-			state.chatdate=data
+		chatDate(state, data) {
+			state.chatdate = data
 		},
+		Receiver(state, data) {
+			state.receivers = data
+		},
+
 		tologins(state) {
 			state.admin = {}
 		},
@@ -44,30 +46,38 @@ export default new Vuex.Store({
 				})
 			}
 		},
-		squareids(state,data){
+		squareids(state, data) {
 			state.squareId = data
 		},
-		
+
 	},
 	actions: {
 		// 聊天建立
-		onlines({state}){
-			if(state.admin.username){
-				
-				
-			}else{
+		onlines({
+			state
+		}) {
+			if (!state.admin.username) {
 				uni.navigateTo({
-				    url: '/pages/login/login'
+					url: '/pages/login/login'
 				});
 			}
-			
 		},
 		// 消息好友信息
-		chatDates({commit},data){
-			commit('chatDate',data);
+		Receivers({
+			commit
+		}, data) {
+			commit('Receiver', data);
 		},
-		squareid({commit},data){
-			commit('squareids',data)
+		// 消息好友信息
+		chatDates({
+			commit
+		}, data) {
+			commit('chatDate', data);
+		},
+		squareid({
+			commit
+		}, data) {
+			commit('squareids', data)
 		},
 		tologin({
 			commit
