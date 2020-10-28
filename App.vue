@@ -7,9 +7,6 @@ export default {
     if (this.$store.state.admin.username) {
         this.socket.emit("online", this.$store.state.admin.username); 
     } else {
-      // uni.navigateTo({
-      //   url: "/pages/login/login",
-      // });
 	  uni.reLaunch({
 	      url: '/pages/login/login'
 	  });
