@@ -16,6 +16,7 @@
 							<image class="vd-cover" src="../../static/homeimg/play@x1.png" mode=""></image>
 						</view>
 						<functionbox class="userget" />
+						<synopsis class="synopsisbox"/>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -25,13 +26,15 @@
 <script>
 	import IndexHeader from './index-header.vue';
 	import functionbox from './functionbox.vue';
+	import synopsis from './synopsis.vue'
 	const videoJson = require('./mock-video.js');
 	console.log(videoJson)
 	let timer = null;
 	export default {
 		components: {
 			'index-header': IndexHeader,
-			functionbox
+			functionbox,
+			synopsis
 		},
 		data() {
 			return {
@@ -173,11 +176,17 @@
 		position: absolute;
 		right: 0rpx;
 		bottom: 150rpx;
-		height: 560rpx;
+		height: 580rpx;
 		width: 100rpx;
 		z-index: 1000000;
 	}
+	.synopsisbox{
+		position: relative;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
 	.uni-video-video{
-		height: auto !important;
+		
 	}
 </style>

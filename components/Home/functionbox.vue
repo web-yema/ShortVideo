@@ -6,9 +6,22 @@
 			</view>
 			<image @click="changexihuan" v-if="show===0" class="usicon" src="../../static/homeimg/xihuan@x1.png" mode=""></image>
 			<image @click="changexihuan" v-if="show===1" class="usicon" src="../../static/homeimg/xihuan@x2.png" mode=""></image>
+			<view class="numfont"><text class="num_span">99万</text></view>
 			<image @click="getpinlun" class="usicon" src="../../static/homeimg/pinglun@x1.png" mode=""></image>
-			<image class="usicon" src="../../static/homeimg/zhuanfa@x1.png" mode=""></image>
+			<view class="numfont"><text class="num_span">0</text></view>
+			<image @click="goshare" class="usicon" src="../../static/homeimg/zhuanfa@x1.png" mode=""></image>
+			<view class="numfont"><text class="num_span">分享</text></view>
 		</view>
+		<uni-popup ref="popup" type="bottom">
+			<view class="pinglunbox">
+				<h3 class="h3box">全部评论</h3>
+			</view>
+		</uni-popup>
+		<uni-popup ref="popup2" type="bottom">
+			<view class="pinglunbox visz">
+				<h3 class="h3box">分享到</h3>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -28,7 +41,10 @@
 				}
 			},
 			getpinlun(){
-				
+				this.$refs.popup.open()
+			},
+			goshare(){
+				this.$refs.popup2.open()
 			}
 		}
 	}
@@ -59,6 +75,28 @@
 	.usicon{
 		width: 70rpx;
 		height: 70rpx;
-		margin: 30rpx 0;
+		margin-top: 30rpx;
+	}
+	.pinglunbox{
+		background-color: white;
+		height: 900rpx;
+		border-top-left-radius: 30rpx;
+		border-top-right-radius: 30rpx;
+	}
+	.visz{
+		height: 400rpx;
+	}
+	.h3box{
+		margin-left: 30rpx;
+		margin-top: 20rpx;
+	}
+	.numfont{
+		width: 70rpx;
+		margin-top: 10rpx;
+	}
+	.num_span{
+		font-size: 24rpx;
+		text-align: center;
+		color: white;
 	}
 </style>
