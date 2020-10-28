@@ -7,8 +7,8 @@ import {
 export default new Vuex.Store({
 	state: {
 		admin: {
-			username:'15735163995',
-			nickname:'lxp'
+			username:'1234567890',
+			nickname:'12345'
 		},
 		squareId:0,
 		chatdate:{

@@ -1,0 +1,32 @@
+<template>
+	<view :style="{height: screenHeight}" class="inbox">
+		<Home></Home>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				screenHeight:0
+			};
+		},
+		mounted() {
+			let height = 0
+			uni.getSystemInfo({
+				success(res) {
+					height = res.screenHeight-50+'px'
+				}
+			})
+			this.screenHeight = height
+			console.log(this.screenHeight)
+		}
+	}
+</script>
+
+<style>
+.inbox{
+	/* // height: 100% !important; */
+	/* // background-color: #3B4144; */
+}
+</style>
