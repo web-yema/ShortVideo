@@ -1,6 +1,6 @@
 <template>
 	<view>
-		新闻页面
+		<Journalist></Journalist>
 	</view>
 </template>
 

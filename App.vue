@@ -33,5 +33,6 @@ export default {
   font-family: uniicons;
   src: url("/static/uni.ttf");
 }
+
 /* #endif */
 </style>

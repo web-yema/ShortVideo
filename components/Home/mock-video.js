@@ -39,7 +39,7 @@ module.exports = [
         id: 2,
         avator: '/static/uimg/u__chat_img12.jpg',
         poster: '/static/placeholder/video-img0.jpg',
-        src: 'https://videocdn.jellow.site/lkxvGNLiNz0s9cgtJ8cYQ2hH-rZE.mp4?sign=060b6f379147467845fce7f7c47508c5&t=5f98e671',
+        src: 'https://videocdn.jellow.site/lkY3InN5OejyJKcIZNjbxKFdaSHp.mp4?sign=9c2063445c76898a6f8bf86c0f0edc96&t=5f98f56a',
         author: 'Alisa',
         subtitle: '不要在乎别人的流言蜚语',
         keyword: ['经典老歌'],
