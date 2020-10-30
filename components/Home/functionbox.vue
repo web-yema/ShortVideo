@@ -2,15 +2,16 @@
 	<view class="funbox">
 		<view class="right_box">
 			<view class="headbox">
-				<image class="headimg" src="https://profile.csdnimg.cn/6/2/8/3_leizi929" mode=""></image>
+				<image @click="gouserlist" class="headimg" src="https://profile.csdnimg.cn/6/2/8/3_leizi929" mode=""></image>
 			</view>
-			<image @click="changexihuan" v-if="show===0" class="usicon" src="../../static/homeimg/xihuan@x1.png" mode=""></image>
-			<image @click="changexihuan" v-if="show===1" class="usicon" src="../../static/homeimg/xihuan@x2.png" mode=""></image>
+			<image @click="changexihuan" v-if="thisuser.islike===false" class="usicon" src="../../static/homeimg/xihuan@x1.png" mode=""></image>
+			<image @click="changexihuan" v-if="thisuser.islike===true" class="usicon" src="../../static/homeimg/xihuan@x2.png" mode=""></image>
 			<view class="numfont"><text class="num_span">99万</text></view>
 			<image @click="getpinlun" class="usicon" src="../../static/homeimg/pinglun@x1.png" mode=""></image>
 			<view class="numfont"><text class="num_span">0</text></view>
 			<image @click="goshare" class="usicon" src="../../static/homeimg/zhuanfa@x1.png" mode=""></image>
 			<view class="numfont"><text class="num_span">分享</text></view>
+			
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="pinglunbox">
@@ -32,19 +33,29 @@
 				show:0
 			};
 		},
+		props:{
+			thisuser:Object
+		},
+		mounted() {
+			this.xihuan()
+		},
 		methods:{
+			xihuan(){
+				this.$emit('xihuanshow', this.show)
+			},
 			changexihuan(){
-				if(this.show===0){
-					this.show=1
-				}else{
-					this.show=0
-				}
+				this.thisuser.islike = !this.thisuser.islike
 			},
 			getpinlun(){
 				this.$refs.popup.open()
 			},
 			goshare(){
 				this.$refs.popup2.open()
+			},
+			gouserlist(){
+				uni.navigateTo({
+					url:"/pages/them/them"
+				})
 			}
 		}
 	}

@@ -32,4 +32,9 @@ export default {
 }
 
 /* #endif */
+.uni-video-video {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
 </style>

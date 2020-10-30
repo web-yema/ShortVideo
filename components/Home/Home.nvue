@@ -23,7 +23,6 @@
 				}
 			})
 			this.screenHeight = height
-			console.log(this.screenHeight)
 		}
 	}
 </script>
