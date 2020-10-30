@@ -1,6 +1,6 @@
 <template>
 	<view :style="{height: screenHeight}">
-		<vertical></vertical>
+		<!-- <vertical></vertical> -->
 	</view>
 </template>
 

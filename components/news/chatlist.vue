@@ -11,6 +11,12 @@
         <view class="nickname">{{ item.nickname }}</view>
         <view class="signature">{{ item.signature }}</view>
       </view>
+	 
+	<view  v-if="xiaoxitisi[item.username]" >
+		<view class="tishi" v-if="xiaoxitisi[item.username].length" >
+			{{ xiaoxitisi[item.username].length}}		
+		</view>
+	  </view>
     </view>
   </view>
 </template>
@@ -31,14 +37,15 @@ export default {
 	  		 this.friendsList()
 	  	}
 	  },100)
+	
      	
   },
   onShow() {
-	  console.log('sds')
- 
+	  console.log('ss')
+	 
   },
   computed: {
-    ...mapState(["admin"]),
+    ...mapState(["admin",'xiaoxitisi']),
   },
   methods: {
     friendsList() {
@@ -90,6 +97,16 @@ export default {
         color: #999999;
       }
     }
+	.tishi{
+		width: 1.3rem;
+		height: 1.3rem;
+		border-radius: 50%;
+		background: red;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 1.3rem;
+		font-size: 0.7rem;
+	}
   }
 }
 </style>

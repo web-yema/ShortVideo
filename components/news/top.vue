@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="cu-list grid col-4 tools align-center justify-center">
-				<view class="flex align-center justify-center">
-					<image src="../../static/msg/fans.png" mode="widthFix"></image>
+				<view class="flex align-center justify-center"  @click="btns()"  >
+					<image  src="../../static/msg/fans.png" mode="widthFix"></image>
 					<text>粉丝</text>
 				</view>
 				<view class="flex align-center justify-center">
@@ -27,6 +27,12 @@
 			return {
 				
 			};
+		},
+		methods:{
+			btns(){
+				console.log('ss')
+				
+			}
 		}
 	}
 </script>
