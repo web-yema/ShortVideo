@@ -73,11 +73,15 @@ export default {
   },
   onLoad() {
 	  // 获取聊天记录
+	this.$store.dispatch('hideToast',false)
+	
 	let tiemsas =setInterval(()=>{
 		if(this.admin.username){
 			clearInterval(tiemsas)
 			  this.getMessage();
+			  this.$store.dispatch('qingchuxi',this.chatdate.username)
 		}
+		
 	},100)
   
     //监听广播消息
@@ -87,8 +91,8 @@ export default {
   computed: {
     ...mapState(["chatdate", "admin"]),
   },
-  methods: {
-	
+  
+  methods: {	
     scroll: function (e) {
       this.old.scrollTop = e.detail.scrollTop;
     },
@@ -117,10 +121,12 @@ export default {
           }
 
           let that = this;
+		  this.$store.dispatch('qingchuxi',this.chatdate.username)
           //滚动到底部
           // 因为vue的虚拟DOM 每次生成的新消息都是之前的，所以采用异步setTimeout
           setTimeout(() => {
             that.scrollTop = this.itemAverageHeight * this.list.length;
+			
           }, 100);
         },
         fail: (err) => {
@@ -146,6 +152,7 @@ export default {
     },
     //发送消息
     send() {
+		// this.$messagepop({succe: "success",messages:`发送消息`})
       if (this.content) {
         let chatData = {
           username: this.admin.username,
@@ -185,7 +192,11 @@ export default {
         }
       });
     },
+	
   },
+  onUnload(){
+	  this.$store.dispatch('hideToast',true)
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -221,6 +232,7 @@ export default {
   overflow-y: scroll;
   box-sizing: border-box;
 }
+// 我的消息列表
 .text-content-right {
   width: 100%;
   margin: 1rem 0;
@@ -246,8 +258,9 @@ export default {
       position: absolute;
       top: 0;
       right: 0;
-      min-width: 2rem;
-      max-width: 80vw;
+      // min-width: 5rem;
+      width: 80vw;
+	  text-align: right;
       height: 1.5rem;
     }
     .text {
@@ -285,8 +298,7 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      min-width: 2rem;
-      max-width: 80vw;
+      width: 80vw;
       height: 1.5rem;
     }
     .text {

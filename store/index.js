@@ -12,9 +12,14 @@ export default new Vuex.Store({
 		admin: {},
 		squareId: 0,
 		chatdate: {},
-		receivers: {}
+		receivers: {},
+		xiaoxitisi:{},
+		hideToast:true,
 	},
 	mutations: {
+		hideToasts(state,data){
+			state.hideToast = data
+		},
 		// 消息好友信息
 		chatDate(state, data) {
 			state.chatdate = data
@@ -42,20 +47,55 @@ export default new Vuex.Store({
 				data: data.data
 			});
 			if (!admins) {
-				console.log('ss')
-					uni.hideLoading();
-					uni.switchTab({
-						url: '/pages/mine/mine'
-					})
+				uni.hideLoading();
+				uni.switchTab({
+					url: '/pages/mine/mine'
+				})
 				
 			}
 		},
 		squareids(state, data) {
 			state.squareId = data
 		},
+		// 没有读取消息提示
+		xiaoxiTisi(state,data){
+			console.log(data)
+			if(!state.xiaoxitisi[data.username]){
+				console.log('等级考试的')
+				state.xiaoxitisi[data.username]=[]
+			}
+			
+			let arr = JSON.parse( JSON.stringify(state.xiaoxitisi[data.username]))
+			let list = [...arr, data]
+			
+			state.xiaoxitisi={
+					...	state.xiaoxitisi,
+					[data.username]:list
+			}
+			console.log(state.xiaoxitisi)
+		},
+		qingChuxi(state,data){
+			console.log(data)
+			state.xiaoxitisi={
+				...state.xiaoxitisi,
+				[data]:[]
+			}
+		}
+		
 
 	},
 	actions: {
+		hideToast({commit},data){
+			commit('hideToasts',data)
+		},
+		qingchuxi({commit},data){
+			
+			commit('qingChuxi',data)
+		},
+		// 没有读取消息提示
+		xiaoxitisi({commit},data){
+			commit('xiaoxiTisi',data)
+		},
 		// 聊天建立
 		onlines({
 			state
