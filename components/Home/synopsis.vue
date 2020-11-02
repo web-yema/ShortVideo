@@ -35,7 +35,7 @@
 	}
 	.username{
 		color: #FFFFFF;
-		font-size: 30rpx;
+		font-size: 34rpx;
 	}
 	.timeago{
 		color: #c8c8c8;

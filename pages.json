@@ -14,8 +14,9 @@
 		"style": {
 			"navigationBarTitleText": "首页",
 			"app-plus": {
-			          "titleNView": false
-			 }
+				"titleNView": false
+			},
+			"enablePullDownRefresh": false
 		}
 	}    ,{
             "path" : "pages/Journalism/Journalism",
