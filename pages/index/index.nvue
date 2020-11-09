@@ -3,7 +3,20 @@
 </template>
 <script>
 export default {
-  data: {},
+  data() {
+    return {
+      screenHeight: 0,
+    };
+  },
+  mounted() {
+    let height = 0;
+    uni.getSystemInfo({
+      success(res) {
+        height = res.screenHeight - 50 + "px";
+      },
+    });
+    this.screenHeight = height;
+  },
 };
 </script>
 <style>
