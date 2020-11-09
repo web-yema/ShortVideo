@@ -2,7 +2,7 @@
   <view class="chat-list">
     <view
       class="list-box"
-      v-for="(item, index) in arr"
+      v-for="(item, index) in friendsList"
       :key="index"
       @click="toChat(item)"
     >
@@ -11,7 +11,6 @@
         <view class="nickname">{{ item.nickname }}</view>
         <view class="signature">{{ item.signature }}</view>
       </view>
-	 
 	<view  v-if="xiaoxitisi[item.username]" >
 		<view class="tishi" v-if="xiaoxitisi[item.username].length" >
 			{{ xiaoxitisi[item.username].length}}		
@@ -34,35 +33,23 @@ export default {
 	  let tiemsa =setInterval(()=>{
 	  	if(this.admin.username){
 	  		clearInterval(tiemsa)
-	  		 this.friendsList()
+			 this.$store.dispatch('friendsList')
 	  	}
 	  },100)
-	
-     	
-  },
-  onShow() {
-	  console.log('ss')
-	 
+	  this.getMsgs()
   },
   computed: {
-    ...mapState(["admin",'xiaoxitisi']),
+    ...mapState(["admin",'xiaoxitisi','friendsList']),
   },
   methods: {
-    friendsList() {
-      uni.request({
-        url: `${baseUrl}/getfriends`,
-        method: "POST",
-        data: {
-          username: this.admin.username,
-        },
-        success: (res) => {
-          this.arr = res.data.data;
-        },
-        fail: (err) => {
-          console.log(err);
-        },
-      });
-    },
+	 //接收消息
+	  getMsgs() {
+	    //接收广播消息
+	    this.socket.on("getFriends", (content) => {
+			console.log('接收广播消息')
+			this.$store.dispatch('friendsList')
+	    });
+	  },
     toChat(item) {
       this.$store.dispatch("chatDates", item);
       uni.navigateTo({

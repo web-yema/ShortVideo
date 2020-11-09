@@ -15,6 +15,7 @@ export default new Vuex.Store({
 		receivers: {},
 		xiaoxitisi:{},
 		hideToast:true,
+		friendsList:[]
 	},
 	mutations: {
 		hideToasts(state,data){
@@ -24,6 +25,7 @@ export default new Vuex.Store({
 		chatDate(state, data) {
 			state.chatdate = data
 		},
+		
 		Receiver(state, data) {
 			state.receivers = data
 		},
@@ -39,7 +41,6 @@ export default new Vuex.Store({
 
 		},
 		loginStatesa(state, data) {
-			
 			state.admin = data.data
 			const admins = uni.getStorageSync('admin');
 			uni.setStorage({
@@ -54,14 +55,17 @@ export default new Vuex.Store({
 				
 			}
 		},
+		// 获取好友列表
+		friendsLists(state,data){
+			state.friendsList=data
+		},
+		
 		squareids(state, data) {
 			state.squareId = data
 		},
 		// 没有读取消息提示
 		xiaoxiTisi(state,data){
-			console.log(data)
 			if(!state.xiaoxitisi[data.username]){
-				console.log('等级考试的')
 				state.xiaoxitisi[data.username]=[]
 			}
 			
@@ -72,10 +76,8 @@ export default new Vuex.Store({
 					...	state.xiaoxitisi,
 					[data.username]:list
 			}
-			console.log(state.xiaoxitisi)
 		},
 		qingChuxi(state,data){
-			console.log(data)
 			state.xiaoxitisi={
 				...state.xiaoxitisi,
 				[data]:[]
@@ -85,6 +87,22 @@ export default new Vuex.Store({
 
 	},
 	actions: {
+		friendsList({commit,state}) {
+		  uni.request({
+		    url: `${baseUrl}/getfriends`,
+		    method: "POST",
+		    data: {
+		      username: state.admin.username,
+		    },
+		    success: (res) => {
+				commit('friendsLists',res.data.data)
+		    },
+		    fail: (err) => {
+		      console.log(err);
+		    },
+		  });
+		},
+		
 		hideToast({commit},data){
 			commit('hideToasts',data)
 		},
@@ -128,6 +146,7 @@ export default new Vuex.Store({
 		}) {
 			commit('tologins')
 		},
+		// 获取用户信息
 		admins({
 			commit
 		}) {
