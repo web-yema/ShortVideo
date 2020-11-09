@@ -1,16 +1,8 @@
 <template>
   <view class="chat-list">
-    <!-- <view class="list-box" @click="toChat('抖音小助手')">
-      <image class="photo" src="../../static/msg/at.png" mode=""></image>
-      <view class="name-box">
-        <view class="nickname">抖音小助手</view>
-        <view class="signature">ssdsd</view>
-      </view>
-    </view> -->
-
     <view
       class="list-box"
-      v-for="(item, index) in arr"
+      v-for="(item, index) in friendsList"
       :key="index"
       @click="toChat(item)"
     >
@@ -19,6 +11,11 @@
         <view class="nickname">{{ item.nickname }}</view>
         <view class="signature">{{ item.signature }}</view>
       </view>
+	<view  v-if="xiaoxitisi[item.username]" >
+		<view class="tishi" v-if="xiaoxitisi[item.username].length" >
+			{{ xiaoxitisi[item.username].length}}		
+		</view>
+	  </view>
     </view>
   </view>
 </template>
@@ -33,27 +30,26 @@ export default {
     };
   },
   mounted() {
-    this.friendsList();
+	  let tiemsa =setInterval(()=>{
+	  	if(this.admin.username){
+	  		clearInterval(tiemsa)
+			 this.$store.dispatch('friendsList')
+	  	}
+	  },100)
+	  this.getMsgs()
   },
   computed: {
-    ...mapState(["admin"]),
+    ...mapState(["admin",'xiaoxitisi','friendsList']),
   },
   methods: {
-    friendsList() {
-      uni.request({
-        url: `${baseUrl}/getfriends`,
-        method: "POST",
-        data: {
-          username: this.admin.username,
-        },
-        success: (res) => {
-          this.arr = res.data.data;
-        },
-        fail: (err) => {
-          console.log(err);
-        },
-      });
-    },
+	 //接收消息
+	  getMsgs() {
+	    //接收广播消息
+	    this.socket.on("getFriends", (content) => {
+			console.log('接收广播消息')
+			this.$store.dispatch('friendsList')
+	    });
+	  },
     toChat(item) {
       this.$store.dispatch("chatDates", item);
       uni.navigateTo({
@@ -88,6 +84,16 @@ export default {
         color: #999999;
       }
     }
+	.tishi{
+		width: 1.3rem;
+		height: 1.3rem;
+		border-radius: 50%;
+		background: red;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 1.3rem;
+		font-size: 0.7rem;
+	}
   }
 }
 </style>

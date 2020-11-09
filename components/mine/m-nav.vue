@@ -47,7 +47,7 @@ export default {
 
 <style>
 	.page-body{
-		width: 100%;height: 200vh;
+		width: 100%;min-height: 40vh;
 		background-color: #171A23;
 	}
 	.btn-area{

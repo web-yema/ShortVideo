@@ -97,9 +97,14 @@ export default {
     },
     // 登录点击事件
     login() {
+		
       if (this.Flag.username.length == 0 && this.Flag.password.length === 0) {
         this.messa("error", "手机号和密码不能为空");
       } else {
+		  uni.showLoading({
+		      title: '登录中',
+			  mask:true
+		  });
         uni.request({
           url: `${baseUrl}/login`,
           method: "POST",
@@ -109,14 +114,17 @@ export default {
           },
           success: (res) => {
             if (res.data.code == 203) {
+				 uni.hideLoading();
               this.messa("error", res.data.message);
             } else if (res.data.code == 201) {
+				 uni.hideLoading();
               this.messa("error", res.data.message);
             } else if (res.data.code == 200) {
               uni.setStorage({
                 key: "token",
                 data: res.data.data.token,
               });
+			 
               this.$store.dispatch("loginStates");
             }
           },
@@ -133,6 +141,10 @@ export default {
       } else if (this.reFlag.repass != this.reFlag.reendpass) {
         this.messa("error", "俩次输入的密码不一样");
       } else {
+		  uni.showLoading({
+		      title: '注册中',
+				mask:true
+		  });
         uni.request({
           url: `${baseUrl}/register`,
           method: "POST",
@@ -141,14 +153,17 @@ export default {
             password: this.reFlag.repass,
           },
           success: (res) => {
-            console.log(res.data);
             if (res.data.code == "201") {
+				uni.hideLoading();
               this.messa("error", res.data.message);
             } else if (res.data.code == "202") {
+				uni.hideLoading();
               this.messa("error", res.data.message);
             } else if (res.data.code == "204") {
+				uni.hideLoading();
               this.messa("error", res.data.message);
             } else if (res.data.code === "200") {
+				uni.hideLoading();
               this.messa("success", res.data.message);
               this.current = 0;
               this.reFlag.rename = "";
@@ -156,6 +171,7 @@ export default {
             }
           },
           fail: (err) => {
+			  uni.hideLoading();
             console.log(err);
           },
         });

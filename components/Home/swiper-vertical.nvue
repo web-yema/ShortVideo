@@ -6,16 +6,17 @@
 			<swiper class="swiper-box" :style="{height: screenHeight}" :vertical="true" :indicator-dots="false" :duration="200"
 			 :current="videoIndex" @change="handleSlider">
 				<swiper-item v-for="(item, index) in vlist" :key="index">
-					<view class="uni_vdplayer" :style="{height: screenHeight}">
-						<video @click.stop="handleClicked" :autoplay="true" :id="'myVideo' + index" ref="players" class="player-video" :src="item.src"
-						 :controls="false" :loop="true" :show-center-play-btn="false" objectFit="fill">
+					<view class="uni_vdplayer">
+						<video @click.stop="handleClicked" id="myVideo" ref="players" class="player-video" :src="item.src" :controls="false"
+						 :loop="true" :show-center-play-btn="false" @timeupdate="videoTimeUpdateEvent">
 							<!-- :show-center-play-btn="false" 隐藏video播放按钮 -->
 						</video>
 						<!-- 中间播放按钮 -->
-						<view class="flexbox" @click="handleClicked(index)" v-if="!isPlay">
+						<view class="flexbox" :style="{height: screenHeight,width: screenWidth}" @click="handleClicked(index)" v-if="!isPlay">
 							<image class="vd-cover" src="../../static/homeimg/play@x1.png" mode=""></image>
 						</view>
-						<functionbox class="userget" />
+						<functionbox :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget" />
+						<synopsis class="synopsisbox" />
 					</view>
 				</swiper-item>
 			</swiper>
@@ -25,13 +26,14 @@
 <script>
 	import IndexHeader from './index-header.vue';
 	import functionbox from './functionbox.vue';
+	import synopsis from './synopsis.vue'
 	const videoJson = require('./mock-video.js');
-	console.log(videoJson)
 	let timer = null;
 	export default {
 		components: {
 			'index-header': IndexHeader,
-			functionbox
+			functionbox,
+			synopsis
 		},
 		data() {
 			return {
@@ -40,12 +42,12 @@
 				isPlay: false, //当前视频是否播放中
 				clickNum: 0,
 				screenHeight: 0,
-				screenWidth: 0
-				//记录点击次数
+				screenWidth: 0,
+				showxihuan: false, //控制喜欢
+				thisuser: '', //单条数据
+				currentTime: 0, //初始视频时间
+				videoContext: {}, // 用于绑定视频标签
 			};
-		},
-		onLoad() {
-
 		},
 		mounted() {
 			this.init();
@@ -57,27 +59,36 @@
 					width = res.screenWidth + 'px';
 				}
 			})
-			this.screenHeight = height
-			this.screenWidth = width
+			this.screenHeight = height;
+			this.screenWidth = width;
 		},
 		methods: {
 			init() {
 				setTimeout(() => {
-					this.play(this.videoIndex);
-				}, 200);
+					this.videoIndex = 1
+					this.thisuser = videoJson[this.videoIndex]
+					this.play(0);
+				}, 1000);
+			},
+			xihuanshow(e) {
+				this.showxihuan = e
 			},
 			handleSlider(e) {
 				// 滑动切换
 				let curIndex = e.detail.current;
 				this.play(e)
 				if (curIndex === this.videoIndex + 1) {
-					console.log('向上滑动');
+					this.thisuser = videoJson[this.videoIndex + 1]
+					// console.log('向上滑动');
 					this.$refs.players[this.videoIndex + 1].play(); // 下一个开始播放并且从头开始播放
-					this.$refs.players[this.videoIndex].pause(); // 当前视频暂停播放
+					this.$refs.players[this.videoIndex].seek(0); // 当前视频暂停播放
+					this.$refs.players[this.videoIndex].pause();
 				} else if (curIndex === this.videoIndex - 1) {
-					console.log('向下滑动');
+					this.thisuser = videoJson[this.videoIndex - 1]
+					// console.log('向下滑动');
 					this.$refs.players[this.videoIndex - 1].play(); // 上一个开始播放并且从头开始播放
-					this.$refs.players[this.videoIndex].pause(); // 当前视频暂停播放
+					this.$refs.players[this.videoIndex].seek(0); // 当前视频暂停播放
+					this.$refs.players[this.videoIndex].pause();
 				}
 				this.videoIndex = curIndex;
 			},
@@ -99,7 +110,8 @@
 				this.clickNum++;
 				timer = setTimeout(() => {
 					if (this.clickNum >= 2) {
-						console.log('双击视频');
+						// 双击喜欢
+						this.thisuser.islike = !this.thisuser.islike
 					} else {
 						console.log('单击视频');
 						if (this.isPlay) {
@@ -152,15 +164,13 @@
 		width: 750upx;
 		flex-direction: column;
 		flex: 1;
-
 	}
 
 	.flexbox {
+		width: 750upx;
 		position: absolute;
-		top: 280px;
+		top: 300%;
 		left: 160%;
-		height: 750px;
-		text-align: center;
 	}
 
 	.vd-cover {
@@ -173,11 +183,21 @@
 		position: absolute;
 		right: 0rpx;
 		bottom: 150rpx;
-		height: 560rpx;
+		height: 580rpx;
 		width: 100rpx;
 		z-index: 1000000;
 	}
-	.uni-video-video{
-		height: auto !important;
+
+	.synopsisbox {
+		position: relative;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+
+	.uni-video-video {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 </style>
