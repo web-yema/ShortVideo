@@ -72,6 +72,15 @@
             }
             
         }
+        ,{
+            "path" : "components/mine/bianji/bianji",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "编辑资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

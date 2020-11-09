@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<view class="box" v-for="(tuijian,index) in Journalist" :key="index">
+		<view class="box" v-for="(tuijian,index) in Journalists" :key="index" @click="openjournalistInfo(tuijian._id)">
 			<view class="title">
 				{{tuijian.title}}
 			</view>
-			<view class="img-list" @tap="openjournalistInfo">
+			<view class="img-list">
 				<video class="img" :src="tuijian.videourl" mode=""></video>
 			</view>
 			<view class="publisher">
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+	import {baseUrl} from '@/api/index.js'
+	import {time3} from '../timer/index.js' 
 	export default {
 		data() {
 			return {
@@ -30,15 +32,30 @@
 						time:'17:24:08'
 					}
 				],
+				Journalists:[],
 			};
 		},
+		mounted(){
+			uni.startPullDownRefresh();
+			this.getjournalistInfo()
+		},
 		methods: {
-			openjournalistInfo(e){
+			getjournalistInfo(){
+				uni.request({
+					url:`${ baseUrl }/getjournalism`,
+					method:"POST",
+					success: res => {
+						this.Journalists = res.data.data
+						for(let i=0;i<res.data.data.length;i++){
+							res.data.data[i].time=time3(res.data.data[i].time)
+						}
+					},
+					fail: err => {}
+				})
+			},
+			openjournalistInfo(id){
 				uni.navigateTo({
-					url: '/components/journalistInfo/journalistInfo',
-					success: res => {},
-					fail: () => {},
-					complete: () => {}
+					url: '/components/journalistInfo/journalistInfo?id=' + id,
 				});
 			},
 		}

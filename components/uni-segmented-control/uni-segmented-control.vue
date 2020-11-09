@@ -6,10 +6,10 @@
 			<text :style="{color:
           index === currentIndex
             ? styleType === 'text'
-              ? activeColor
-              : '#fff'
+              ? '#fff'
+              : '#5E616C'
             : styleType === 'text'
-              ? '#000'
+              ? '#5E616C'
               : activeColor}" class="segmented-control__text">{{ item }}</text>
 		</view>
 	</view>
@@ -44,7 +44,7 @@
 			},
 			activeColor: {
 				type: String,
-				default: '#007aff'
+				default: '#F5CD23'
 			},
 			styleType: {
 				type: String,
