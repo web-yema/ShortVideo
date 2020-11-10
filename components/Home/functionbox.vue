@@ -4,47 +4,75 @@
 			<view class="headbox">
 				<image @click="gouserlist" class="headimg" src="https://profile.csdnimg.cn/6/2/8/3_leizi929" mode=""></image>
 			</view>
-			<image @click="changexihuan" v-if="thisuser.islike===false" class="usicon" src="../../static/homeimg/xihuan@x1.png" mode=""></image>
-			<image @click="changexihuan" v-if="thisuser.islike===true" class="usicon" src="../../static/homeimg/xihuan@x2.png" mode=""></image>
+			<!-- 喜欢 -->
+			<image @click.stop="changexihuan" v-if="thisuser.dianzan.find((n)=>n==admin.username)==admin.username?false:true" class="usicon" src="../../static/homeimg/xihuan@x1.png" mode=""></image>
+			<image @click.stop="changexihuan" v-if="thisuser.dianzan.find((n)=>n==admin.username)==admin.username?true:false" class="usicon" src="../../static/homeimg/xihuan@x2.png" mode=""></image>
 			<view class="numfont"><text class="num_span">99万</text></view>
-			<image @click="getpinlun" class="usicon" src="../../static/homeimg/pinglun@x1.png" mode=""></image>
+			<!-- 评论 -->
+			<image @click.stop="getpinlun" class="usicon" src="../../static/homeimg/pinglun@x1.png" mode=""></image>
 			<view class="numfont"><text class="num_span">0</text></view>
-			<image @click="goshare" class="usicon" src="../../static/homeimg/zhuanfa@x1.png" mode=""></image>
+			<!-- 转发 -->
+			<image @click.stop="goshare" class="usicon" src="../../static/homeimg/zhuanfa@x1.png" mode=""></image>
 			<view class="numfont"><text class="num_span">分享</text></view>
 			
 		</view>
+		<!-- 评论 -->
 		<uni-popup ref="popup" type="bottom">
 			<view class="pinglunbox">
-				<h3 class="h3box">全部评论</h3>
+				<Comment @fromComment="getComment"/>
 			</view>
 		</uni-popup>
+		<!-- 转发 -->
 		<uni-popup ref="popup2" type="bottom">
 			<view class="pinglunbox visz">
-				<h3 class="h3box">分享到</h3>
+				<Share @fromComment="getComment"/>
 			</view>
 		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import Comment from './comment.vue'
+	import Share from './share.vue'
 	export default {
+		components:{
+			Comment,
+			Share
+		},
 		data() {
 			return {
-				show:0
+				islike:false,
+				admin:''
 			};
 		},
 		props:{
 			thisuser:Object
 		},
 		mounted() {
-			this.xihuan()
+			let _this = this
+			uni.getStorage({
+				key:'admin',
+				success:(res)=>{
+					_this.admin = res.data
+				}
+			})
 		},
 		methods:{
-			xihuan(){
-				this.$emit('xihuanshow', this.show)
-			},
+			// 喜欢按钮控制
 			changexihuan(){
-				this.thisuser.islike = !this.thisuser.islike
+				let asd = this.admin.username
+				if(this.admin){
+					if(this.thisuser.dianzan.find((n)=>n==this.admin.username)){
+						this.thisuser.dianzan.pop(this.admin.username)
+					}else{
+						this.thisuser.dianzan.push(this.admin.username)
+					}
+				}else{
+					uni.showLoading({
+					    title: '请登录',
+						mask:true
+					});
+				}
 			},
 			getpinlun(){
 				this.$refs.popup.open()
@@ -56,6 +84,14 @@
 				uni.navigateTo({
 					url:"/pages/them/them"
 				})
+			},
+			// 评论、分享关闭按钮控制
+			getComment(v){
+				if(v == false){
+					this.$refs.popup.close()
+				}else{
+					this.$refs.popup2.close()
+				}
 			}
 		}
 	}
@@ -96,10 +132,6 @@
 	}
 	.visz{
 		height: 400rpx;
-	}
-	.h3box{
-		margin-left: 30rpx;
-		margin-top: 20rpx;
 	}
 	.numfont{
 		width: 70rpx;

@@ -15,8 +15,12 @@ export default new Vuex.Store({
 		receivers: {},
 		xiaoxitisi:{},
 		hideToast:true,
+		isvideos: true
 	},
 	mutations: {
+		isvideos(state,data){
+			state.isvideos = data
+		},
 		hideToasts(state,data){
 			state.hideToast = data
 		},
@@ -85,6 +89,9 @@ export default new Vuex.Store({
 
 	},
 	actions: {
+		isVideo({commit},data){
+			commit('isvideos',data)
+		},
 		hideToast({commit},data){
 			commit('hideToasts',data)
 		},

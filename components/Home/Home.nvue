@@ -5,6 +5,7 @@
 </template>
 
 <script>
+	import { mapState } from "vuex";
 	import vertical from './swiper-vertical.nvue'
 	export default {
 		components:{
@@ -12,7 +13,7 @@
 		},
 		data() {
 			return {
-				screenHeight:0
+				screenHeight:0,
 			};
 		},
 		mounted() {
@@ -22,7 +23,9 @@
 					height = res.screenHeight-50+'px'
 				}
 			})
-			this.screenHeight = height
+			this.screenHeight = height;
+		},
+		methods:{
 		}
 	}
 </script>

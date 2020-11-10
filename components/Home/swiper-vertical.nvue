@@ -1,35 +1,58 @@
 <template>
-	<view :style="{height: screenHeight}" class="content">
-		<index-header></index-header>
-		<!--首页头部导航栏组件-->
-		<view class="video-list" :style="{height: screenHeight}">
-			<swiper class="swiper-box" :style="{height: screenHeight}" :vertical="true" :indicator-dots="false" :duration="200"
-			 :current="videoIndex" @change="handleSlider">
-				<swiper-item v-for="(item, index) in vlist" :key="index">
-					<view class="uni_vdplayer">
-						<video @click.stop="handleClicked" id="myVideo" ref="players" class="player-video" :src="item.src" :controls="false"
-						 :loop="true" :show-center-play-btn="false" @timeupdate="videoTimeUpdateEvent">
-							<!-- :show-center-play-btn="false" 隐藏video播放按钮 -->
-						</video>
+	<view class="page">
+		<view class="cover-view-center" v-if="distanceX==0">
+			<view :style="{ height:height,width: width }" ref="touch" @touchstart="ListTouchStart" @touchmove="ListTouchMove"
+			 @click.stop="clickVideo(index)">
+			</view>
+			<index-header></index-header>
+			<functionbox v-if="compshow" :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget opcity" />
+			<synopsis v-if="compshow" class="synopsisbox opcity" />
+		</view>
+		<view class="swiper" ref="swiper">
+			<block v-for="(item, idx) in videoList" :key="idx">
+				<view class="video-box" :style="{ height:height,width: width }">
+					<!-- 视频渲染数预加载数影响性能 -->
+					<block :style="{ height:height }">
+						<video :src="item.src" :style="{ width: width }" class="player-video" ref="players" @click.stop="clickVideo(index)"
+						 :loop="true" :show-center-play-btn="false" :controls="false" :show-loading="false"></video>
+						<functionbox v-if="compshow" :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget" />
+						<synopsis v-if="compshow" :thisuser="thisuser" class="synopsisbox" />
 						<!-- 中间播放按钮 -->
 						<view class="flexbox" :style="{height: screenHeight,width: screenWidth}" @click="handleClicked(index)" v-if="!isPlay">
 							<image class="vd-cover" src="../../static/homeimg/play@x1.png" mode=""></image>
 						</view>
-						<functionbox :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget" />
-						<synopsis class="synopsisbox" />
-					</view>
-				</swiper-item>
-			</swiper>
+					</block>
+				</view>
+			</block>
 		</view>
+
+		<view class="left-view" :style="{ height: height,width: width,left:`${-parseInt(width)}px` }" ref="left" @touchstart="ListTouchStart"
+		 @touchmove="ListTouchMove">
+			<text class="title-text" @click="clickbt">{{videoList[index].content}}</text>
+		</view>
+		<view class="right-view" :style="{ height: height,width: width,right:`${-parseInt(width)}px` }" ref="right"
+		 @touchstart="ListTouchStart" @touchmove="ListTouchMove">
+			<text class="title-text">{{videoList[index].content}}</text>
+		</view>
+
 	</view>
 </template>
+
 <script>
-	import IndexHeader from './index-header.vue';
 	import functionbox from './functionbox.vue';
-	import synopsis from './synopsis.vue'
-	const videoJson = require('./mock-video.js');
+	import synopsis from './synopsis.vue';
+	import IndexHeader from './index-header.vue';
+	import scrollMixins from './scrollMixins';
+	import {
+		mapState
+	} from 'vuex';
+	import {
+		baseUrl
+	} from "@/api/index";
 	let timer = null;
+	let _this;
 	export default {
+		mixins: [scrollMixins],
 		components: {
 			'index-header': IndexHeader,
 			functionbox,
@@ -37,73 +60,116 @@
 		},
 		data() {
 			return {
-				videoIndex: 0,
-				vlist: videoJson,
-				isPlay: false, //当前视频是否播放中
+				videoList: [{
+						src: 'https://videocdn.jellow.site/lkrla29US24xpUnhAot1YE7guQPX.mp4?sign=9bd1d7b8138fe45858923c2fe4502dc3&t=5faa0145',
+						content: '有人懂你的奇奇怪怪，也有人陪你可可爱爱。',
+						islike: true,
+						nikename:"Alyssa黄金之风",
+						dianzan: [
+							"13145678909"
+						]
+					},
+					{
+						src: 'https://f.video.weibocdn.com/002eZGd0gx07FLlO8N4A0104120eWU790E060.mp4?label=mp4_720p&template=1280x720.25.0&trans_finger=721584770189073627c6ee9d880087b3&media_id=4539723423875083&tp=8x8A3El:YTkl0eM8&us=0&ori=1&bf=3&ot=h&ps=3lckmu&uid=3ZoTIp&ab=966-g1,3370-g1&Expires=1604978765&ssig=wSb7elhvYz&KID=unistore,video',
+						content: '卧槽...有被惊到 出必买系列',
+						islike: true,
+						nikename:"魔神的鼓动",
+						dianzan: [
+
+						]
+					},
+					{
+						src: 'https://videocdn.jellow.site/lkrla29US24xpUnhAot1YE7guQPX.mp4?sign=9bd1d7b8138fe45858923c2fe4502dc3&t=5faa0145',
+						content: '有人懂你的奇奇怪怪，也有人陪你可可爱爱。',
+						islike: false,
+						nikename:"琴川不下雨",
+						dianzan: [
+
+						]
+					},
+					{
+						src: 'https://f.video.weibocdn.com/002eZGd0gx07FLlO8N4A0104120eWU790E060.mp4?label=mp4_720p&template=1280x720.25.0&trans_finger=721584770189073627c6ee9d880087b3&media_id=4539723423875083&tp=8x8A3El:YTkl0eM8&us=0&ori=1&bf=3&ot=h&ps=3lckmu&uid=3ZoTIp&ab=966-g1,3370-g1&Expires=1604978765&ssig=wSb7elhvYz&KID=unistore,video',
+						content: '卧槽...有被惊到 出必买系列',
+						islike: true,
+						nikename:"低保户王大爷",
+						dianzan: [
+
+						]
+					},
+				],
 				clickNum: 0,
-				screenHeight: 0,
-				screenWidth: 0,
-				showxihuan: false, //控制喜欢
 				thisuser: '', //单条数据
-				currentTime: 0, //初始视频时间
-				videoContext: {}, // 用于绑定视频标签
-			};
+				isPlay: true, //当前视频是否播放中
+				showxihuan: false, //控制喜欢
+				statelist: [],
+				admin: '' ,// 自己数据
+				compshow:true
+			}
+		},
+		created() {
+			this.getvideos()
+			this.init()
+		},
+		onHide() {
+			for (let item of this.videoList) {
+				item.flag = false
+			}
+		},
+		computed: {
+			...mapState(["isvideos"])
+		},
+		watch: {
+			isvideos: {
+				handler: function(newVal, oldVal) {
+					if (this.isvideos === false) {
+						this.pause(this.$refs.players[this.videoIndex]);
+					} else {
+						this.play(this.$refs.players[this.videoIndex]);
+					}
+				}
+		
+			}
 		},
 		mounted() {
-			this.init();
-			let height = 0
-			let width = 0
-			uni.getSystemInfo({
-				success(res) {
-					height = res.screenHeight - 50 + 'px';
-					width = res.screenWidth + 'px';
+			let _this = this
+			uni.getStorage({
+				key: 'admin',
+				success: (res) => {
+					_this.admin = res.data
 				}
 			})
-			this.screenHeight = height;
-			this.screenWidth = width;
 		},
 		methods: {
+			clickbt() {
+				console.log(11)
+			},
+			//设置参数
 			init() {
+				this.typeX = true //开启左右滑动
+				this.playCount = 2 //剩余多少视频加载视频列表
+				this.startDistance = 5 //判断左右上下拖动的启动距离 px
+				this.minTime = 300 //判断快速滑动的时间,该时间内无视回弹距离判断
+				this.backDistance = 200 //判断上下滑动的回弹距离 px
 				setTimeout(() => {
-					this.videoIndex = 1
-					this.thisuser = videoJson[this.videoIndex]
-					this.play(0);
-				}, 1000);
+					this.play(this.statelist[this.index])
+					this.thisuser = this.videoList[this.index]
+				}, 200);
 			},
-			xihuanshow(e) {
-				this.showxihuan = e
-			},
-			handleSlider(e) {
-				// 滑动切换
-				let curIndex = e.detail.current;
-				this.play(e)
-				if (curIndex === this.videoIndex + 1) {
-					this.thisuser = videoJson[this.videoIndex + 1]
-					// console.log('向上滑动');
-					this.$refs.players[this.videoIndex + 1].play(); // 下一个开始播放并且从头开始播放
-					this.$refs.players[this.videoIndex].seek(0); // 当前视频暂停播放
-					this.$refs.players[this.videoIndex].pause();
-				} else if (curIndex === this.videoIndex - 1) {
-					this.thisuser = videoJson[this.videoIndex - 1]
-					// console.log('向下滑动');
-					this.$refs.players[this.videoIndex - 1].play(); // 上一个开始播放并且从头开始播放
-					this.$refs.players[this.videoIndex].seek(0); // 当前视频暂停播放
-					this.$refs.players[this.videoIndex].pause();
-				}
-				this.videoIndex = curIndex;
-			},
-			play(index) {
-				// 播放
-				this.$refs.players[this.videoIndex].play();
-				this.isPlay = true;
-			},
-			// 暂停
-			pause(index) {
-				this.$refs.players[this.videoIndex].pause();
-				this.isPlay = false;
+			getvideos() {
+				_this = this
+				uni.request({
+					url: `${baseUrl}/allvideo`,
+					method: "POST",
+					success(res) {
+						_this.statelist = res.data.data
+					},
+					fail(code) {
+						console.log(code)
+					}
+				})
 			},
 			// 点击视频事件
-			handleClicked(index) {
+			clickVideo(index) {
 				if (timer) {
 					clearTimeout(timer);
 				}
@@ -111,9 +177,12 @@
 				timer = setTimeout(() => {
 					if (this.clickNum >= 2) {
 						// 双击喜欢
-						this.thisuser.islike = !this.thisuser.islike
+						if (this.thisuser.dianzan.find((n) => n == this.admin.username)) {
+							this.thisuser.dianzan.pop(this.admin.username)
+						} else {
+							this.thisuser.dianzan.push(this.admin.username)
+						}
 					} else {
-						console.log('单击视频');
 						if (this.isPlay) {
 							this.pause(index);
 						} else {
@@ -122,61 +191,59 @@
 					}
 					this.clickNum = 0;
 				}, 300);
+			},
+			play(index) {
+				// 播放
+				this.$refs.players[this.index].play()
+				this.isPlay = true;
+			},
+			// 暂停
+			pause(index) {
+				this.$refs.players[this.index].pause();
+				this.isPlay = false;
+			},
+			// 喜欢
+			xihuanshow(e) {
+				this.showxihuan = e
 			}
 		}
-	};
+	}
 </script>
 
-<style>
-	.content {
+<style lang="scss" scoped>
+	.page {
 		flex: 1;
-		flex-direction: column;
-		/* overflow: hidden; */
-		background-color: #fff;
-	}
-
-	.video-list {
-		width: 750upx;
-		flex-direction: column;
-		background-color: #007AFF;
-		flex: 1;
-	}
-
-	.swiper-box {
-		flex-direction: column;
-		flex: 1;
-	}
-
-	.swiper-item {
-		flex-direction: column;
-		flex: 1;
-	}
-
-	.uni_vdplayer {
+		overflow: hidden;
 		position: relative;
-		flex-direction: column;
-		flex: 1;
-		background-color: black;
+	}
 
+	.swiper {
+		position: relative;
+		background-color: #000;
+	}
+
+	.left-view {
+		position: absolute;
+		top: 0;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.right-view {
+		position: absolute;
+		top: 0;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.cover-view-center {
+		position: fixed;
+		// z-index: 9;
 	}
 
 	.player-video {
-		width: 750upx;
 		flex-direction: column;
 		flex: 1;
-	}
-
-	.flexbox {
-		width: 750upx;
-		position: absolute;
-		top: 300%;
-		left: 160%;
-	}
-
-	.vd-cover {
-		width: 60px;
-		height: 60px;
-		opacity: 0.6;
 	}
 
 	.userget {
@@ -195,9 +262,20 @@
 		bottom: 0;
 	}
 
-	.uni-video-video {
+	.flexbox {
+		width: 750upx;
 		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
+		top: 270%;
+		left: 160%;
+	}
+
+	.vd-cover {
+		width: 60px;
+		height: 60px;
+		opacity: 0.6;
+	}
+
+	.opcity {
+		opacity: 0;
 	}
 </style>
