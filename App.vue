@@ -14,7 +14,7 @@ export default {
       this.socket.emit("online", this.$store.state.admin.username);
     } else {
       uni.reLaunch({
-        url: "/pages/login/login",
+        url: "/pages/index/index",
       });
     }
     //接收广播消息
@@ -36,10 +36,8 @@ export default {
     });
   },
   onShow: function () {
-    console.log("ss");
-
-    console.log(this.socket.id);
     console.log("App Show");
+	
   },
   computed: {
     ...mapState(["hideToast", "chatdate"]),

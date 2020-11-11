@@ -18,13 +18,15 @@
 						回关
 					</view>
 					<view v-else @click="cancelBtn(item)">
-						互想关注
+						互相关注
 					</view>
+					
 				 </view>
 			  </view>
 			</view>
 	</view>
 </template>
+
 
 <script>
 	import { baseUrl } from "@/api/index";

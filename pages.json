@@ -6,9 +6,7 @@
 		"style": {
 			"navigationBarTitleText": "首页",
 			"app-plus": {
-			      "titleNView":{
-			      	"type":"transparent"
-			      }
+			      "titleNView": false //禁用原生导航栏
 			 }
 		}
 		} 
