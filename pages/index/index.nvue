@@ -38,7 +38,6 @@
 		methods:{
 			firstopen(){
 				const value = uni.getStorageSync('admin')
-				console.log(value)
 				if(value){
 					setTimeout(()=>{
 						this.asdf = true

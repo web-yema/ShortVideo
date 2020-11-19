@@ -5,7 +5,7 @@ export default {
 	data() {
 		return {
 			typeX: false, //是否开启左右滑动
-			playCount: 2, //剩余多少视频加载视频列表
+			playCount: 100, //剩余多少视频加载视频列表
 			startDistance: 5, //开启左右滑动时有效,判断左右上下拖动的启动距离
 			minTime: 300, //判断为快速滑动的时间,该时间内无视回弹
 			backDistance: 200, //上下滑动的回弹距离
@@ -112,7 +112,7 @@ export default {
 
 				let touch_origin =
 					`y+${this.distance}<=0 && ${move}==0 && ${this.distanceX}==0 && 
-					y+${this.distance}-${this.sysheight}>=${-this.sysheight*this.videoList.length}? 
+					y+${this.distance}-${this.sysheight}>=${-this.sysheight*this.statelist.length}? 
 					y+${this.distance} : ${this.distance}`
 				// 找到元素 
 				let swiperRef = this.getEl(this.$refs.swiper)
@@ -165,7 +165,7 @@ export default {
 							// 记录当前坐标
 							const distance = this.distance + e.deltaY
 
-							if (distance > 0 || this.distance + e.deltaY - this.sysheight < -this.sysheight * this.videoList.length) return
+							if (distance > 0 || this.distance + e.deltaY - this.sysheight < -this.sysheight * this.statelist.length) return
 
 							this.bindTiming(distance, e.deltaY, quickMove)
 						}
@@ -190,7 +190,6 @@ export default {
 			let sysheight = this.sysheight
 
 			let changed_Y, final_Y, translate_Y_origin
-			this.compshow = false
 			// 生成表达式逻辑
 			if (Math.abs(Y) <= this.backDistance && !quickMove) {
 				// 往上下拖动20以内时
@@ -216,27 +215,19 @@ export default {
 					this.distance = final_Y
 					this.scroll = false
 					if (Math.abs(Y) > this.backDistance || quickMove) {
-						for (let item of this.videoList) {
+						for (let item of this.statelist) {
 							item.flag = false
 						}
 						this.oldindex = this.index
 						this.index = -this.distance / this.sysheight
 
-						this.isPlay = true
-						this.$refs.players[this.index].play()
-						this.$refs.players[this.oldindex].seek(0); // 当前视频暂停播放
-						this.$refs.players[this.oldindex].pause();
-						this.thisuser = this.videoList[this.index]
-						setTimeout(()=>{
-							this.compshow = true
-						},300)
 						
 						//加载视频
-						if (this.videoList.length - this.index - 1 <= this.playCount) {
+						if (this.statelist.length - this.index - 1 <= this.playCount) {
 							await this.pushVideoList(e)
 						}
 					} else if (Math.abs(Y) <= this.backDistance && !quickMove) {
-						this.videoList[this.index].flag = true
+						this.statelist[this.index].flag = true
 					}
 				}
 			})
@@ -292,7 +283,7 @@ export default {
 					if (Math.abs(X) <= 10 && this.distanceX == 0) {
 
 					} else if (Math.abs(X) > 10 && this.distanceX != 0) {
-						for (let item of this.videoList) {
+						for (let item of this.statelist) {
 							item.flag = false
 						}
 					} else if (Math.abs(X) > 10 && this.distanceX == 0) {
@@ -325,14 +316,14 @@ export default {
 					this.distance = final_Y
 					this.scroll = false
 
-					for (let item of this.videoList) {
+					for (let item of this.statelist) {
 						item.flag = false
 					}
 					this.index = -this.distance / this.sysheight
 
-					this.videoList[this.index].flag = true
+					this.statelist[this.index].flag = true
 					//加载视频
-					if (this.videoList.length - this.index - 1 <= this.playCount) {
+					if (this.statelist.length - this.index - 1 <= this.playCount) {
 						await this.pushVideoList()
 					}
 				}
@@ -344,7 +335,7 @@ export default {
 				resolve()
 			})
 			promise.then(res => {
-				this.videoList[index].flag = !this.videoList[index].flag
+				this.statelist[index].flag = !this.statelist[index].flag
 			})
 		},
 		pushVideoList(e) {
@@ -352,7 +343,7 @@ export default {
 			this.isPlay = true
 			this.$refs.players[this.oldindex].seek(0); // 当前视频暂停播放
 			this.$refs.players[this.oldindex].pause();
-			this.thisuser = this.videoList[this.index]
+			this.thisuser = this.statelist[this.index]
 		}
 	},
 	watch: {

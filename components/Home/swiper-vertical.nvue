@@ -5,20 +5,20 @@
 			 @click.stop="clickVideo(index)">
 			</view>
 			<index-header></index-header>
-			<functionbox v-if="compshow" :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget opcity" />
-			<synopsis v-if="compshow" class="synopsisbox opcity" />
+			<functionbox :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget opcity" />
+			<synopsis class="synopsisbox opcity" />
 		</view>
 		<view class="swiper" ref="swiper">
-			<block v-for="(item, idx) in videoList" :key="idx">
+			<block v-for="(item, idx) in statelist" :key="idx">
 				<view class="video-box" :style="{ height:height,width: width }">
 					<!-- 视频渲染数预加载数影响性能 -->
 					<block :style="{ height:height }">
-						<video :src="item.src" :style="{ width: width }" class="player-video" ref="players" @click.stop="clickVideo(index)"
+						<video :src="item.video_url" :style="{ width: width }" class="player-video" ref="players" @click.stop="clickVideo(index)"
 						 :loop="true" :show-center-play-btn="false" :controls="false" :show-loading="false"></video>
-						<functionbox v-if="compshow" :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget" />
-						<synopsis v-if="compshow" :thisuser="thisuser" class="synopsisbox" />
+						<functionbox :thisuser="thisuser" v-on:xihuanshow="xihuanshow" class="userget" />
+						<synopsis :thisuser="thisuser" class="synopsisbox" />
 						<!-- 中间播放按钮 -->
-						<view class="flexbox" :style="{height: screenHeight,width: screenWidth}" @click="handleClicked(index)" v-if="!isPlay">
+						<view class="flexbox" :style="{height: height,width: height}" @click="handleClicked(index)" v-if="!isPlay">
 							<image class="vd-cover" src="../../static/homeimg/play@x1.png" mode=""></image>
 						</view>
 					</block>
@@ -28,11 +28,11 @@
 
 		<view class="left-view" :style="{ height: height,width: width,left:`${-parseInt(width)}px` }" ref="left" @touchstart="ListTouchStart"
 		 @touchmove="ListTouchMove">
-			<text class="title-text" @click="clickbt">{{videoList[index].content}}</text>
+			<text class="title-text" @click="clickbt"></text>
 		</view>
 		<view class="right-view" :style="{ height: height,width: width,right:`${-parseInt(width)}px` }" ref="right"
 		 @touchstart="ListTouchStart" @touchmove="ListTouchMove">
-			<text class="title-text">{{videoList[index].content}}</text>
+			<text class="title-text"></text>
 		</view>
 
 	</view>
@@ -60,50 +60,53 @@
 		},
 		data() {
 			return {
-				videoList: [{
-						src: 'https://videocdn.jellow.site/lkrla29US24xpUnhAot1YE7guQPX.mp4?sign=9bd1d7b8138fe45858923c2fe4502dc3&t=5faa0145',
-						content: '有人懂你的奇奇怪怪，也有人陪你可可爱爱。',
-						islike: true,
-						nikename:"Alyssa黄金之风",
-						dianzan: [
-							"13145678909"
-						]
-					},
-					{
-						src: 'https://f.video.weibocdn.com/002eZGd0gx07FLlO8N4A0104120eWU790E060.mp4?label=mp4_720p&template=1280x720.25.0&trans_finger=721584770189073627c6ee9d880087b3&media_id=4539723423875083&tp=8x8A3El:YTkl0eM8&us=0&ori=1&bf=3&ot=h&ps=3lckmu&uid=3ZoTIp&ab=966-g1,3370-g1&Expires=1604978765&ssig=wSb7elhvYz&KID=unistore,video',
-						content: '卧槽...有被惊到 出必买系列',
-						islike: true,
-						nikename:"魔神的鼓动",
-						dianzan: [
+				// videoList: [{
+				// 		cover_url:"https://img-cdn-qiniu.dcloud.net.cn/uploads/avatar/000/55/14/83_avatar_mid.jpg",
+				// 		video_url: '/static/homeimg/dw@x2.mp4',
+				// 		username:'15735163995',
+				// 		video_describe: '有人懂你的奇奇怪怪，也有人陪你可可爱爱。',
+				// 		nikename:"Alyssa黄金之风",
+				// 		dianzan: [
+				// 			"13145678909"
+				// 		]
+				// 	},
+				// 	{
+				// 		cover_url:"https://img-cdn-qiniu.dcloud.net.cn/uploads/avatar/000/89/35/93_avatar_min.jpg",
+				// 		video_url: '/static/homeimg/dw@x2.mp4',
+				// 		username:'13145678909',
+				// 		video_describe: '卧槽...有被惊到 出必买系列',
+				// 		nikename:"魔神的鼓动",
+				// 		dianzan: [
 
-						]
-					},
-					{
-						src: 'https://videocdn.jellow.site/lkrla29US24xpUnhAot1YE7guQPX.mp4?sign=9bd1d7b8138fe45858923c2fe4502dc3&t=5faa0145',
-						content: '有人懂你的奇奇怪怪，也有人陪你可可爱爱。',
-						islike: false,
-						nikename:"琴川不下雨",
-						dianzan: [
+				// 		]
+				// 	},
+				// 	{
+				// 		cover_url:"https://img-cdn-qiniu.dcloud.net.cn/uploads/avatar/001/39/52/51_avatar_mid.jpg",
+				// 		video_url: '/static/homeimg/dw@x2.mp4',
+				// 		username:'17635438954',
+				// 		video_describe: '有人懂你的奇奇怪怪，也有人陪你可可爱爱。',
+				// 		nikename:"琴川不下雨",
+				// 		dianzan: [
 
-						]
-					},
-					{
-						src: 'https://f.video.weibocdn.com/002eZGd0gx07FLlO8N4A0104120eWU790E060.mp4?label=mp4_720p&template=1280x720.25.0&trans_finger=721584770189073627c6ee9d880087b3&media_id=4539723423875083&tp=8x8A3El:YTkl0eM8&us=0&ori=1&bf=3&ot=h&ps=3lckmu&uid=3ZoTIp&ab=966-g1,3370-g1&Expires=1604978765&ssig=wSb7elhvYz&KID=unistore,video',
-						content: '卧槽...有被惊到 出必买系列',
-						islike: true,
-						nikename:"低保户王大爷",
-						dianzan: [
+				// 		]
+				// 	},
+				// 	{
+				// 		cover_url:"https://img-cdn-qiniu.dcloud.net.cn/uploads/avatar/000/86/77/53_avatar_min.jpg",
+				// 		video_url: '/static/homeimg/dw@x2.mp4',
+				// 		username:'17635438954',
+				// 		video_describe: '卧槽...有被惊到 出必买系列',
+				// 		nikename:"低保户王大爷",
+				// 		dianzan: [
 
-						]
-					},
-				],
+				// 		]
+				// 	},
+				// ],
 				clickNum: 0,
 				thisuser: '', //单条数据
 				isPlay: true, //当前视频是否播放中
 				showxihuan: false, //控制喜欢
 				statelist: [],
 				admin: '' ,// 自己数据
-				compshow:true
 			}
 		},
 		created() {
@@ -119,6 +122,7 @@
 			...mapState(["isvideos"])
 		},
 		watch: {
+			// 监听离开进入页面视频暂停播放
 			isvideos: {
 				handler: function(newVal, oldVal) {
 					if (this.isvideos === false) {
@@ -146,14 +150,14 @@
 			//设置参数
 			init() {
 				this.typeX = true //开启左右滑动
-				this.playCount = 2 //剩余多少视频加载视频列表
+				this.playCount = 100 //剩余多少视频加载视频列表
 				this.startDistance = 5 //判断左右上下拖动的启动距离 px
 				this.minTime = 300 //判断快速滑动的时间,该时间内无视回弹距离判断
 				this.backDistance = 200 //判断上下滑动的回弹距离 px
 				setTimeout(() => {
+					this.thisuser = this.statelist[this.index]
 					this.play(this.statelist[this.index])
-					this.thisuser = this.videoList[this.index]
-				}, 200);
+				}, 2000);
 			},
 			getvideos() {
 				_this = this
@@ -184,7 +188,9 @@
 						}
 					} else {
 						if (this.isPlay) {
-							this.pause(index);
+							setTimeout(()=>{
+								this.pause(index);
+							},250)
 						} else {
 							this.play(index);
 						}
@@ -263,16 +269,16 @@
 	}
 
 	.flexbox {
-		width: 750upx;
 		position: absolute;
-		top: 270%;
-		left: 160%;
 	}
 
 	.vd-cover {
 		width: 60px;
 		height: 60px;
 		opacity: 0.6;
+		position: absolute;
+		left: 150vh;
+		top: 300vh;
 	}
 
 	.opcity {
